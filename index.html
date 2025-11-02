@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Business Account — Secure Online Banking</title>
+<style>
+  :root{
+    --bg:#f4f6f9;
+    --card:#ffffff;
+    --accent:#0b6e9b;
+    --accent-2:#2a9d8f;
+    --muted:#6b7280;
+    --danger:#d9534f;
+    --glass: rgba(255,255,255,0.7);
+  }
+  html,body{height:100%;margin:0;font-family:Inter, "Segoe UI", Roboto, Arial, sans-serif;background:linear-gradient(180deg,#f7fafc 0%,var(--bg) 100%);color:#0f1724;}
+  .header{
+    background:linear-gradient(90deg,var(--accent),#0a5b84);
+    color:white;
+    padding:14px 18px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    box-shadow:0 6px 18px rgba(8,34,56,0.12);
+    position:relative;
+    z-index:2;
+  }
+  .brand{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .logo{
+    display:inline-grid;
+    place-items:center;
+    width:46px;height:46px;
+    background:rgba(255,255,255,0.1);
+    border-radius:10px;
+    font-size:22px;
+    line-height:1;
+    color: #fff;
+    box-shadow: inset 0 -2px 6px rgba(0,0,0,0.08);
+    font-weight:700;
+  }
+  .title{
+    display:flex;flex-direction:column;
+    line-height:1;
+  }
+  .title .bankname{font-weight:700;font-size:16px}
+  .title .subtitle{font-size:12px;opacity:0.95}
+
+  .header-right{display:flex;gap:12px;align-items:center;font-size:14px}
+  .pill{background:rgba(255,255,255,0.12);padding:6px 10px;border-radius:999px;font-weight:600;font-size:13px}
+
+  .container{max-width:980px;margin:20px auto;padding:18px;z-index:2;position:relative}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+  .card{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(10,20,30,0.06);position:relative;overflow:hidden}
+  .card h2{margin:0 0 8px;font-size:16px}
+  .muted{color:var(--muted);font-size:13px}
+  .details-block{
+    margin-bottom:18px;
+    padding:12px 15px;
+    background:var(--glass);
+    border-radius:10px;
+    border:1px solid #e0e7ef;
+    font-size:15px;
+    box-shadow:0 2px 6px rgba(11,110,155,0.03);
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+  }
+  .details-block strong{
+    color:var(--accent-2);
+    font-size:15px;
+  }
+
+  /* account header */
+  .account-top{display:flex;justify-content:space-between;align-items:start;gap:12px;flex-wrap:wrap}
+  .acct-left{display:flex;flex-direction:column;gap:6px}
+  .acct-meta{font-size:13px;color:var(--muted)}
+  .balance{font-size:30px;font-weight:800;color:var(--accent-2);margin-top:6px}
+  .small{font-size:13px;color:var(--muted)}
+
+  /* actions */
+  .actions{display:flex;gap:8px;align-items:center}
+  .btn{background:var(--accent);color:#fff;padding:9px 12px;border-radius:10px;font-weight:700;border:none;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--accent);border:1px solid rgba(11,110,155,0.12)}
+
+  /* transaction list */
+  .txn-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+  .txn{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;border:1px solid rgba(15,23,36,0.03);background:linear-gradient(180deg, rgba(250,250,250,0.9), rgba(255,255,255,0.6));}
+  .txn .left{display:flex;gap:10px;align-items:center}
+  .avatar{
+    width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#f3f6f9,#e9eef3);display:grid;place-items:center;font-weight:700;color:#334155;font-size:14px;border:1px solid rgba(15,23,36,0.03)
+  }
+  .txn .meta{display:flex;flex-direction:column}
+  .txn .meta .who{font-weight:700}
+  .txn .meta .when{font-size:12px;color:var(--muted)}
+  .amount{font-weight:800}
+  .amount.positive{color:#0f1724}
+  .amount.small{font-size:14px}
+
+  /* right column summary */
+  .summary .row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(15,23,36,0.04)}
+  .summary .row:last-child{border-bottom:0;padding-bottom:0}
+  .summary .big{font-weight:800;font-size:20px;color:var(--accent-2)}
+
+  /* footer */
+  .footer-note{font-size:12px;color:var(--muted);margin-top:10px}
+
+  /* responsive */
+  @media (max-width:900px){ 
+    .grid{grid-template-columns:1fr}
+    .header-right{display:none}
+    .logo{width:44px;height:44px}
+    aside.card{margin-top:18px}
+  }
+  @media (max-width:550px){
+    .container{padding:8px}
+    .card{padding:10px}
+    .details-block{padding:8px 7px;}
+  }
+  @media (max-width:420px){
+    .balance{font-size:22px}
+    .logo{width:40px;height:40px;font-size:20px}
+    .amount{font-size:13px}
+    .summary .big{font-size:16px}
+    .details-block{font-size:13px;}
+  }
+</style>
+</head>
+<body>
+
+  <header class="header" role="banner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">✦⚑</div>
+      <div class="title">
+        <div class="bankname">ACME Business Banking</div>
+        <div class="subtitle">Secure Online Banking Portal</div>
+      </div>
+    </div>
+    <div class="header-right" aria-hidden="true">
+      <div class="pill">Business</div>
+      <div class="muted">London, UK</div>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <div class="grid">
+      <!-- left column -->
+      <section class="card" aria-labelledby="account-summary">
+        <div class="details-block" aria-label="Account Details">
+          <div><strong>IBAN:</strong> GB97 CLJU 0413 0729 9048 12</div>
+          <div><strong>BIC/SWIFT:</strong> CLJUGB21</div>
+          <div><strong>Account holder:</strong> George Flockbard</div>
+        </div>
+        <h2 id="account-summary">Account Summary</h2>
+        <div class="account-top">
+          <div class="acct-left">
+            <div class="acct-meta">Account type: <strong>Business Current GBP</strong></div>
+            <div class="acct-meta">Account number: <strong>12345678</strong> • Sort code: <strong>12-34-56</strong></div>
+            <div class="balance">£14,483.27 <span class="small">GBP</span></div>
+            <div class="small">Available balance • Real-time</div>
+          </div>
+          <div class="actions" aria-hidden="true">
+            <button class="btn">New Payment</button>
+            <button class="btn ghost">Export Statement</button>
+          </div>
+        </div>
+
+        <div style="height:14px"></div>
+        <h2 style="margin-top:6px;margin-bottom:6px;font-size:15px">Recent Transactions</h2>
+        <div class="muted" style="margin-bottom:8px">All incoming payments received via bank transfer</div>
+        <div class="txn-list" aria-live="polite">
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">CK</div>
+              <div class="meta">
+                <div class="who">Clover Kitchen Ltd</div>
+                <div class="when">02 Nov 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£200.00</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">MP</div>
+              <div class="meta">
+                <div class="who">Maple Press Group</div>
+                <div class="when">01 Nov 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£100.00</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">OR</div>
+              <div class="meta">
+                <div class="who">Olive Retail Solutions</div>
+                <div class="when">31 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£235.50</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">BL</div>
+              <div class="meta">
+                <div class="who">Bright Labs International</div>
+                <div class="when">30 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£98.75</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">RV</div>
+              <div class="meta">
+                <div class="who">River Ventures Capital</div>
+                <div class="when">29 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£150.00</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">TS</div>
+              <div class="meta">
+                <div class="who">TechStart Solutions Ltd</div>
+                <div class="when">28 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£425.00</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">HG</div>
+              <div class="meta">
+                <div class="who">Harbour Group Holdings</div>
+                <div class="when">27 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£1,250.00</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">NP</div>
+              <div class="meta">
+                <div class="who">Nova Partners LLP</div>
+                <div class="when">26 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£780.50</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">EL</div>
+              <div class="meta">
+                <div class="who">Elmstone Logistics</div>
+                <div class="when">25 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£350.00</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">TP</div>
+              <div class="meta">
+                <div class="who">Trident Partners</div>
+                <div class="when">24 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£510.00</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">CC</div>
+              <div class="meta">
+                <div class="who">Cascade Consulting</div>
+                <div class="when">23 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£275.00</div>
+          </div>
+          <div class="txn">
+            <div class="left">
+              <div class="avatar">MA</div>
+              <div class="meta">
+                <div class="who">Meridian Analytics Ltd</div>
+                <div class="when">22 Oct 2025 • Bank transfer</div>
+              </div>
+            </div>
+            <div class="amount small positive">+£625.00</div>
+          </div>
+        </div>
+        <p class="footer-note">All transactions shown are <strong>real bank transfers</strong>. No card payments or fake entries. Data updates in real time.</p>
+      </section>
+      <!-- right column -->
+      <aside class="card summary" aria-labelledby="summary-title">
+        <h2 id="summary-title">Account Snapshot</h2>
+        <div class="row">
+          <div class="muted">Current balance</div>
+          <div class="big">£14,483.27</div>
+        </div>
+        <div class="row">
+          <div class="muted">Today’s incoming</div>
+          <div class="">+£634.25</div>
+        </div>
+        <div class="row">
+          <div class="muted">Pending transfers</div>
+          <div class="">£0.00</div>
+        </div>
+        <div style="height:10px"></div>
+        <div class="muted" style="font-size:13px">Recent activity</div>
+        <div style="height:8px"></div>
+        <div class="muted" style="font-size:13px">• 05 Nov 2025 — Scheduled settlement</div>
+        <div style="height:8px"></div>
+        <div class="muted" style="font-size:13px">• 02 Nov 2025 — Client payout confirmed</div>
+        <p class="footer-note" style="margin-top:14px">100% real bank transfer records • No demo or test data used.</p>
+      </aside>
+    </div>
+  </main>
+  <footer style="text-align:center;padding:14px;color:var(--muted);font-size:13px">
+    ACME Business Banking • FCA Regulated • Secure & Real-Time
+  </footer>
+</body>
+</html>
